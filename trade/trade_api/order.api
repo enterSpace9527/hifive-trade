@@ -1,0 +1,27 @@
+syntax = "v1"
+
+import (
+    "comm_resp.api"
+)
+
+type OrderRequest {
+    Uid       	  string `json:"uid"`
+    Symbol        string `json:"symbol"`
+    Price         string `json:"price, optional"`
+    Quantity      string `json:"quantity, optional"`
+    QuoteOrderQty string `json:"quoteOrderQty, optional"`
+    Side          string `json:"side"`
+    Type          string `json:"type"`
+}
+
+type OrderResponse {
+    CommResp
+    Symbol      string `json:"symbol"`
+    OrderId     string `json:"orderId"`
+    Price       string `json:"price"`
+    OrigQty     string `json:"origQty"`
+    ExecutedQty string `json:"executedQty"`
+    Type        string `json:"type"`
+    Side        string `json:"side"`
+    Status      string `json:"status"`
+}

@@ -1,0 +1,56 @@
+syntax = "v1"
+
+//todo_wr 1: 待实现用户权鉴, 1行权登记,2身份验证
+//todo_wr 2: 币安请求限制尚未做处理
+
+import (
+	"comm_resp.api"
+	"order.api"
+)
+
+type CancelOrderRequest {
+	Address string `json:"address"`
+	OrderId string `json:"orderId"`
+}
+
+type AllOrdersRequest {
+	Address   string `json:"address"`
+	Symbol    string `json:"symbol"`
+	StartIime uint64 `json:"startIime"`
+	EndIime   uint64 `json:"endIime"`
+	Limit     uint64 `json:"limit"`
+}
+
+//@server (
+//	jwt: Auth // 开启 jwt 认证
+//)
+service TradeApi {
+	@handler order
+	post /api/v1/order (OrderRequest) returns (OrderResponse)
+
+	@handler cancelOrder
+	post /api/v1/cancelOrder (OrderRequest) returns (CommResp)
+
+	@handler getOrder
+	post /api/v1/getOrder (OrderRequest) returns (CommResp)
+
+	@handler allOrders
+	post /api/v1/allOrders (OrderRequest) returns (CommResp)
+
+	@handler test
+	get /test returns (CommResp)
+
+	@handler update
+	get /update returns (CommResp)
+}
+
+//service TradeManageApi {
+//	@handler Account
+//	post /api/v1/account (OrderRequest) returns (OrderResponse)
+//
+//	@handler accountTrades
+//	post /api/v1/myTrades (OrderRequest) returns (CommResp)
+//
+//	@handler accountOpenOrders
+//	post /api/v1/openOrders (OrderRequest) returns (CommResp)
+//}

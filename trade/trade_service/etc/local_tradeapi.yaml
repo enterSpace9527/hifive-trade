@@ -1,0 +1,28 @@
+Name: TradeApi
+Host: 0.0.0.0
+Port: 9527
+
+StartMode: "test"
+FeeRate: 0.01
+OrderMarketPriceConvertRate: 0.98
+
+Postgres:
+  Host: "192.168.71.210"
+  Port: 5432
+  User: "hi-five"
+  Password: "123456"
+  Dbname: "hi-five"
+
+Redis:
+  Host: "192.168.71.210"
+
+WalletService:
+  Url: "http://192.168.71.210:8080"
+
+HifiveAccounts:
+  Account1:
+    ApiKey: "iqNPSGNtFQG6Y4ghUsz8iy1Wuk2fDLyRoLaWZqwtxHYmqr61bGXxP96KUkPL4D5J"
+    SecretKey: "qaAHsHFpKvxn05NS3xWTOwJJy3UnEyaLIeTU7RWuu0NxPgYnaEue8hB2Ua4hySc5"
+  Account2:
+    ApiKey: "vWixcXhrxjZ65ZuROL3MkJ62U3QmNuYMuZnAEdK5v1OzRaCtQX96luEVdg4NgtwI"
+    SecretKey: "T4WNRNFrs86XwBmp2BnLFtG01N3EQbAIN2jq2gXvb1xVWZuylxvC5iurhmNG6Glo"

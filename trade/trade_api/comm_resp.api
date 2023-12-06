@@ -1,0 +1,6 @@
+syntax = "v1"
+
+type CommResp {
+    Code    int    `json:"code"`
+    Message string `json:"message"`
+}
