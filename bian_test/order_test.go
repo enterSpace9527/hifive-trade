@@ -80,6 +80,7 @@ func TestUserData4(t *testing.T) {
 	fmt.Println(detail, err)
 }
 
+// 当前BNB 19.34000000
 func TestUserData5(t *testing.T) {
 	client := binance.NewClient(apiKey, secretKey)
 	account := client.NewGetAccountService()
@@ -91,57 +92,14 @@ func TestUserData5(t *testing.T) {
 func TestUserMarketOrder(t *testing.T) {
 	client := binance.NewClient(apiKey, secretKey)
 	createOrder := client.NewCreateOrderService()
-	createOrder.Symbol("ETHUSDT")
+	createOrder.Symbol("LTCUSDT")
 	createOrder.Type("MARKET")
-	createOrder.Side("SELL")
-	createOrder.Quantity("1")
+	createOrder.Side("BUY")
+	createOrder.Quantity("10")
 	//createOrder.Price("1500")
 	//createOrder.TimeInForce("GTC")
-	//createOrder.QuoteOrderQty("1000")
+	//createOrder.QuoteOrderQty("3000")
 	//createOrder.NewOrderRespType("RESULT")
-	ctx := context.Background()
-	orderResp, err := createOrder.Do(ctx)
-	if err != nil {
-		return
-	}
-
-	fmt.Printf("OrderID:%v ", orderResp.OrderID)
-	fmt.Printf("Symbol:%v ", orderResp.Symbol)
-	fmt.Printf("ClientOrderID:%v ", orderResp.ClientOrderID)
-	fmt.Printf("Price:%v ", orderResp.Price)
-	fmt.Printf("ExecutedQuantity:%v ", orderResp.ExecutedQuantity)
-	fmt.Printf("OrigQuantity:%v ", orderResp.OrigQuantity)
-	fmt.Printf("Type:%v ", orderResp.Type)
-	fmt.Printf("Side:%v ", orderResp.Side)
-	fmt.Printf("Fills:%v ", orderResp.Fills)
-	fmt.Printf("Status:%v ", orderResp.Status)
-	fmt.Printf("TimeInForce:%v ", orderResp.TimeInForce)
-
-	fmt.Println("")
-	for _, fill := range orderResp.Fills {
-		fmt.Println("-----fill-----")
-		fmt.Printf("fill.Price:%v ", fill.Price)
-		fmt.Printf("fill.Quantity:%v ", fill.Quantity)
-		fmt.Printf("fill.Commission:%v ", fill.Commission)
-		fmt.Printf("fill.CommissionAsset:%v ", fill.CommissionAsset)
-		fmt.Printf("fill.TradeID:%v ", fill.TradeID)
-	}
-	fmt.Println("")
-
-	//orderId1Eth := "8SM81zVUHiXq8Nq7hGgFvR"
-	//&{ETHUSDT 7742208 JjECs3zLXZHZGj3rEloyxk 1701396763884 0.00000000 0.47930000 0.47930000 999.90511200 false FILLED GTC MARKET BUY [0xc000100af0 0xc000100b40 0xc000100b90]  } <nil>
-	//&{BTCUSDT 9113527 5SovjE1N3GXMTjQ72qcZVD 1701240030592 0.00000000 0.10000000 0.10000000 3815.07231940 false FILLED GTC MARKET BUY [0xc000100af0 0xc000100b40 0xc000100b90 0xc000100be0 0xc000100c30 0xc000100c80 0xc000100cd0 0xc000100d20 0xc000100d70 0xc000100dc0 0xc000100e10 0xc000100e60 0xc000100eb0]  } <nil>
-}
-
-func TestUserLimitOrder(t *testing.T) {
-	client := binance.NewClient(apiKey, secretKey)
-	createOrder := client.NewCreateOrderService()
-	createOrder.Symbol("ETHUSDT")
-	createOrder.Type("LIMIT")
-	createOrder.Side("BUY")
-	createOrder.Quantity("1")
-	createOrder.Price("100")
-	createOrder.TimeInForce("GTC")
 	ctx := context.Background()
 	orderResp, err := createOrder.Do(ctx)
 	if err != nil {
@@ -168,7 +126,51 @@ func TestUserLimitOrder(t *testing.T) {
 		fmt.Printf("fill.Quantity:%v ", fill.Quantity)
 		fmt.Printf("fill.Commission:%v ", fill.Commission)
 		fmt.Printf("fill.CommissionAsset:%v ", fill.CommissionAsset)
+		fmt.Printf("fill.TradeID:%v\n ", fill.TradeID)
+	}
+	fmt.Println("")
+
+	//orderId1Eth := "8SM81zVUHiXq8Nq7hGgFvR"
+	//&{ETHUSDT 7742208 JjECs3zLXZHZGj3rEloyxk 1701396763884 0.00000000 0.47930000 0.47930000 999.90511200 false FILLED GTC MARKET BUY [0xc000100af0 0xc000100b40 0xc000100b90]  } <nil>
+	//&{BTCUSDT 9113527 5SovjE1N3GXMTjQ72qcZVD 1701240030592 0.00000000 0.10000000 0.10000000 3815.07231940 false FILLED GTC MARKET BUY [0xc000100af0 0xc000100b40 0xc000100b90 0xc000100be0 0xc000100c30 0xc000100c80 0xc000100cd0 0xc000100d20 0xc000100d70 0xc000100dc0 0xc000100e10 0xc000100e60 0xc000100eb0]  } <nil>
+}
+
+func TestUserLimitOrder(t *testing.T) {
+	client := binance.NewClient(apiKey, secretKey)
+	createOrder := client.NewCreateOrderService()
+	createOrder.Symbol("BNBUSDT")
+	createOrder.Type("LIMIT")
+	createOrder.Side("BUY")
+	createOrder.Quantity("0.3")
+	createOrder.Price("2244.3")
+	createOrder.TimeInForce("GTC")
+	ctx := context.Background()
+	orderResp, err := createOrder.Do(ctx)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Printf("OrderID:%v ", orderResp.OrderID)
+	fmt.Printf("Symbol:%v ", orderResp.Symbol)
+	fmt.Printf("ClientOrderID:%v ", orderResp.ClientOrderID)
+	fmt.Printf("Price:%v ", orderResp.Price)
+	fmt.Printf("ExecutedQuantity:%v ", orderResp.ExecutedQuantity)
+	fmt.Printf("OrigQuantity:%v ", orderResp.OrigQuantity)
+	fmt.Printf("Type:%v ", orderResp.Type)
+	fmt.Printf("Side:%v ", orderResp.Side)
+	fmt.Printf("Fills:%v ", orderResp.Fills)
+	fmt.Printf("Status:%v ", orderResp.Status)
+	fmt.Printf("TimeInForce:%v ", orderResp.TimeInForce)
+
+	fmt.Println("")
+	for _, fill := range orderResp.Fills {
+		fmt.Printf("fill.Price:%v ", fill.Price)
+		fmt.Printf("fill.Quantity:%v ", fill.Quantity)
+		fmt.Printf("fill.Commission:%v ", fill.Commission)
+		fmt.Printf("fill.CommissionAsset:%v ", fill.CommissionAsset)
 		fmt.Printf("fill.TradeID:%v ", fill.TradeID)
+		fmt.Println("-----fill-----")
 	}
 	fmt.Println("")
 
@@ -194,7 +196,7 @@ func TestListOrder(t *testing.T) {
 		fmt.Printf("OrderID:%v ", d.OrderID)
 		fmt.Printf("OrderListId:%v ", d.OrderListId)
 		fmt.Printf("ClientOrderID:%v ", d.ClientOrderID)
-		fmt.Printf("PriceClientOrderID:%v ", d.Price)
+		fmt.Printf("Price:%v ", d.Price)
 		fmt.Printf("OrigQuantity:%v ", d.OrigQuantity)
 		fmt.Printf("ExecutedQuantity:%v ", d.ExecutedQuantity)
 		fmt.Printf("CummulativeQuoteQuantity:%v ", d.CummulativeQuoteQuantity)
@@ -220,7 +222,7 @@ func TestGetOrder(t *testing.T) {
 	client := binance.NewClient(apiKey, secretKey)
 	getOrder := client.NewGetOrderService()
 	getOrder.Symbol("ETHUSDT")
-	getOrder.OrigClientOrderID("8SM81zVUHiXq8Nq7hGgFvR")
+	getOrder.OrigClientOrderID("H2AcEev0VIxcy4lMI9b2zC")
 	ctx := context.Background()
 	detail, err := getOrder.Do(ctx)
 	fmt.Println(detail, err)
