@@ -5,7 +5,7 @@ import (
 )
 
 type OrderRequest {
-    Uid       	  string `json:"uid"`
+    Uid       	  uint64 `json:"uid"`
     Symbol        string `json:"symbol"`
     Price         string `json:"price, optional"`
     Quantity      string `json:"quantity, optional"`

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/adshao/go-binance/v2"
 	"github.com/enterSpace9527/hifive-trade/trade/trade_service/internal/gvar"
+	. "github.com/enterSpace9527/hifive-trade/trade/trade_service/internal/models/bian_model"
 	"github.com/enterSpace9527/hifive-trade/trade/trade_service/internal/models/db_model"
 	"github.com/shopspring/decimal"
 	"github.com/sony/sonyflake"
@@ -62,23 +63,34 @@ func (l *OrderLogic) Order(req *types.OrderRequest) (resp *types.OrderResponse, 
 		return resp, nil
 	}
 
+	status := TradeStatus(orderInfo.Status)
+	if status == TradeStatusNew {
+
+	} else if status == TradeStatusPartiallyFilled {
+
+	} else if status == TradeStatusFilled {
+
+	} else {
+
+	}
+
 	l.UpdateResp(resp, orderInfo)
 	return resp, err
 }
 
 func (l *OrderLogic) CheckOrderParams(req *types.OrderRequest) error {
-	tradeType := gvar.TradeType(req.Type)
-	tradeSide := gvar.TradeSide(req.Side)
+	tradeType := TradeType(req.Type)
+	tradeSide := TradeSide(req.Side)
 
-	if (tradeSide == gvar.TradeSideBuy || tradeSide == gvar.TradeSideSell) != true {
+	if (tradeSide == TradeSideBuy || tradeSide == TradeSideSell) != true {
 		return fmt.Errorf("order params incorrect")
 	}
 
-	if tradeType == gvar.TradeTypeMarket {
+	if tradeType == TradeTypeMarket {
 		if req.Quantity != "" || req.QuoteOrderQty != "" {
 			return nil
 		}
-	} else if tradeType == gvar.TradeTypeLimit {
+	} else if tradeType == TradeTypeLimit {
 		if req.Quantity != "" && req.Price != "" {
 			return nil
 		}
@@ -92,12 +104,7 @@ func (l *OrderLogic) BianOrder(req *types.OrderRequest) (*binance.CreateOrderRes
 	l.orderMutex.Lock()
 	defer l.orderMutex.Unlock()
 
-	err := l.CheckOrderParams(req)
-	if err != nil {
-		return nil, err
-	}
-
-	err = l.reqAdjustment(req)
+	err := l.reqAdjustment(req)
 	if err != nil {
 		return nil, err
 	}
@@ -113,8 +120,8 @@ func (l *OrderLogic) BianOrder(req *types.OrderRequest) (*binance.CreateOrderRes
 	createOrder.NewClientOrderID(fmt.Sprintf("C%v", id))
 	createOrder.Symbol(req.Symbol)
 
-	tradeType := gvar.TradeType(req.Type)
-	if tradeType == gvar.TradeTypeLimit {
+	tradeType := TradeType(req.Type)
+	if tradeType == TradeTypeLimit {
 		createOrder.Price(req.Price)
 		createOrder.Quantity(req.Quantity)
 		createOrder.TimeInForce("GTC")
@@ -135,8 +142,8 @@ func (l *OrderLogic) BianOrder(req *types.OrderRequest) (*binance.CreateOrderRes
 }
 
 func (l *OrderLogic) reqAdjustment(req *types.OrderRequest) error {
-	tradeType := gvar.TradeType(req.Type)
-	if tradeType == gvar.TradeTypeMarket {
+	tradeType := TradeType(req.Type)
+	if tradeType == TradeTypeMarket {
 		return l.marketTradeReqAdjustment(req)
 	} else {
 		return l.limitTradeReqAdjustment(req)
@@ -150,9 +157,9 @@ func (l *OrderLogic) marketTradeReqAdjustment(req *types.OrderRequest) error {
 	}
 
 	userFunds := db_model.UserFunds{}
-	tradeType := gvar.TradeType(req.Type)
-	tradeSide := gvar.TradeSide(req.Side)
-	if tradeType == gvar.TradeTypeMarket && tradeSide == gvar.TradeSideBuy {
+	tradeType := TradeType(req.Type)
+	tradeSide := TradeSide(req.Side)
+	if tradeType == TradeTypeMarket && tradeSide == TradeSideBuy {
 		err = l.GetUserFunds(req.Uid, marketSymbol.BaseSymbol, &userFunds)
 		//市价按量单处理买
 		if req.Quantity != "" {
@@ -195,7 +202,7 @@ func (l *OrderLogic) marketTradeReqAdjustment(req *types.OrderRequest) error {
 				req.QuoteOrderQty = userFunds.Amount.String()
 			}
 		}
-	} else if tradeType == gvar.TradeTypeMarket && tradeSide == gvar.TradeSideSell {
+	} else if tradeType == TradeTypeMarket && tradeSide == TradeSideSell {
 		err = l.GetUserFunds(req.Uid, marketSymbol.QuoteSymbol, &userFunds)
 		//市价按量单处理卖
 		if req.QuoteOrderQty != "" {
@@ -248,8 +255,8 @@ func (l *OrderLogic) limitTradeReqAdjustment(req *types.OrderRequest) error {
 		return err
 	}
 	userFunds := db_model.UserFunds{}
-	tradeSide := gvar.TradeSide(req.Side)
-	if tradeSide == gvar.TradeSideBuy {
+	tradeSide := TradeSide(req.Side)
+	if tradeSide == TradeSideBuy {
 		err = l.GetUserFunds(req.Uid, marketSymbol.BaseSymbol, &userFunds)
 		if err != nil {
 			return err
@@ -278,7 +285,7 @@ func (l *OrderLogic) limitTradeReqAdjustment(req *types.OrderRequest) error {
 	return nil
 }
 
-func (l *OrderLogic) GetUserFunds(uid string, symbol string, userFunds *db_model.UserFunds) error {
+func (l *OrderLogic) GetUserFunds(uid uint64, symbol string, userFunds *db_model.UserFunds) error {
 	sqlResult := gvar.PostgresClient.Select("amount").
 		Where("uid = ? AND coin_name = ?", uid, symbol).
 		Find(userFunds)

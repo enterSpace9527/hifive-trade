@@ -1,0 +1,6 @@
+syntax = "v1"
+
+type CancelOrderRequest {
+    Uid     uint64 `json:"Uid"`
+    OrderId string `json:"orderId"`
+}

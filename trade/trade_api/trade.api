@@ -6,24 +6,20 @@ syntax = "v1"
 import (
 	"comm_resp.api"
 	"order.api"
+	"cancel_order.api"
 )
 
-type CancelOrderRequest {
-	Address string `json:"address"`
-	OrderId string `json:"orderId"`
-}
-
 type AllOrdersRequest {
-	Address   string `json:"address"`
+	Uid       uint64 `json:"address"`
 	Symbol    string `json:"symbol"`
 	StartIime uint64 `json:"startIime"`
 	EndIime   uint64 `json:"endIime"`
 	Limit     uint64 `json:"limit"`
 }
 
-//@server (
-//	jwt: Auth // 开启 jwt 认证
-//)
+@server (
+	jwt: Auth // 开启 jwt 认证
+)
 service TradeApi {
 	@handler order
 	post /api/v1/order (OrderRequest) returns (OrderResponse)
@@ -32,10 +28,16 @@ service TradeApi {
 	post /api/v1/cancelOrder (OrderRequest) returns (CommResp)
 
 	@handler getOrder
-	post /api/v1/getOrder (OrderRequest) returns (CommResp)
+	post /api/v1/getOrder (OrderRequest) returns (Co          mmResp)
 
 	@handler allOrders
 	post /api/v1/allOrders (OrderRequest) returns (CommResp)
+
+	@handler historyOrders
+	post /api/v1/historyOrders (OrderRequest) returns (CommResp)
+
+	@handler openOrders
+	post /api/v1/openOrders (OrderRequest) returns (CommResp)
 
 	@handler test
 	get /test returns (CommResp)
@@ -43,14 +45,3 @@ service TradeApi {
 	@handler update
 	get /update returns (CommResp)
 }
-
-//service TradeManageApi {
-//	@handler Account
-//	post /api/v1/account (OrderRequest) returns (OrderResponse)
-//
-//	@handler accountTrades
-//	post /api/v1/myTrades (OrderRequest) returns (CommResp)
-//
-//	@handler accountOpenOrders
-//	post /api/v1/openOrders (OrderRequest) returns (CommResp)
-//}

@@ -5,8 +5,8 @@ import (
 	"time"
 )
 
-type Order struct {
-	ID         int64
+type HistoryOrder struct {
+	ID         uint64
 	Symbol     string
 	Side       string
 	CreateTime time.Time `gorm:"column:create_time"`
@@ -16,15 +16,14 @@ type Order struct {
 	UID        int64
 	Status     string
 	Type       string
-	OID        string `gorm:"column:oid"`
-	CID        string `gorm:"column:cid"`
-	SID        string `gorm:"column:sid"`
-	Address    string
+	OID        int64           `gorm:"column:oid"`
+	CID        string          `gorm:"column:cid"`
+	SID        string          `gorm:"column:sid"`
 	Fee        decimal.Decimal `gorm:"column:fee"`
 	FeeSymbol  decimal.Decimal `gorm:"column:fee_symbol"`
 }
 
 // TableName 设置模型对应的数据库表名
-func (Order) TableName() string {
-	return "order"
+func (HistoryOrder) TableName() string {
+	return "history_orders"
 }

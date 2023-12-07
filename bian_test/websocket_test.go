@@ -15,8 +15,8 @@ func TestWebsocket(t *testing.T) {
 	var err error
 	//订阅关注的市场数据变动
 	//doneC, _, err = binance.WsAllBookTickerServe(bookTickerHandler, errHandler)
-	//doneC, _, err = binance.WsBookTickerServe("ETHUSDT", bookTickerHandler, errHandler)
-	doneC, _, err = binance.WsBookTickerServe("BNBUSDT", bookTickerHandler, errHandler)
+	doneC, _, err = binance.WsBookTickerServe("ETHUSDT", bookTickerHandler, errHandler)
+	//doneC, _, err = binance.WsBookTickerServe("BNBUSDT", bookTickerHandler, errHandler)
 
 	if err != nil {
 		fmt.Println(err)

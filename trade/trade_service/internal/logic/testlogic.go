@@ -28,7 +28,7 @@ func NewTestLogic(ctx context.Context, svcCtx *svc.ServiceContext) *TestLogic {
 
 func (l *TestLogic) Test() (resp *types.CommResp, err error) {
 
-	order := db_model.Order{}
+	order := db_model.HistoryOrder{}
 	gvar.PostgresClient.First(&order, 1)
 	logc.Infof(context.Background(), "order.Price=%v", order.Price.String())
 	return

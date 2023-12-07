@@ -22,6 +22,10 @@ type Redis struct {
 
 type Config struct {
 	rest.RestConf
+	Auth struct { // JWT 认证需要的密钥和过期时间配置
+		AccessSecret string
+		AccessExpire int64
+	}
 	StartMode                   string
 	FeeRate                     float64
 	OrderMarketPriceConvertRate float64

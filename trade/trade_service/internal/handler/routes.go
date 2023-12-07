@@ -33,6 +33,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: allOrdersHandler(serverCtx),
 			},
 			{
+				Method:  http.MethodPost,
+				Path:    "/api/v1/historyOrders",
+				Handler: historyOrdersHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/api/v1/openOrders",
+				Handler: openOrdersHandler(serverCtx),
+			},
+			{
 				Method:  http.MethodGet,
 				Path:    "/test",
 				Handler: testHandler(serverCtx),
@@ -43,5 +53,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: updateHandler(serverCtx),
 			},
 		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 }
